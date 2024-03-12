@@ -4,15 +4,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
+const morgan_1 = __importDefault(require("morgan"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
-/**
- * Clase de inicio de nuestrar aplicacion NodeJsExpress
- * Autor:Luis Oswaldo Rodriguez Lopez
- * Fecha: 23 Junio 2024
- */
+const UsuarioRoutes_1 = __importDefault(require("./routes/UsuarioRoutes"));
 class Server {
     //Inicializa clase
     constructor() {
@@ -37,7 +33,8 @@ class Server {
     }
     //Configura las rutas
     routes() {
-        this.app.use("/", authRoutes_1.default);
+        this.app.use('/', authRoutes_1.default);
+        this.app.use('/usuario', UsuarioRoutes_1.default);
     }
 }
 const server = new Server();

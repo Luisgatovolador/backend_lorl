@@ -1,53 +1,53 @@
-import express ,{Application}from 'express';
-import morgan from 'morgan';
+import express, { Application } from 'express';
 import cors from 'cors';
+import morgan from 'morgan';
 import bodyParser from 'body-parser';
-import authRoutes from './routes/authRoutes'
-/**
- * Clase de inicio de nuestrar aplicacion NodeJsExpress
- * Autor:Luis Oswaldo Rodriguez Lopez
- * Fecha: 23 Junio 2024
- */
+
+
+import authRoutes from './routes/authRoutes';
+import usuarioRoutes from './routes/UsuarioRoutes';
+
 class Server {
-  private app: Application;
+    private app: Application;
 
 
-  //Inicializa clase
-  constructor() {
-      this.app = express();
-      this.config();
-      this.routes();
-      this.app.listen(this.app.get("port"), () => {
-          console.log("Server on port", this.app.get("port"));
-      });
-  }
+    //Inicializa clase
+    constructor() {
+        this.app = express();
+        this.config();
+        this.routes();
+        this.app.listen(this.app.get("port"), () => {
+            console.log("Server on port", this.app.get("port"));
+        });
+    }
 
 
-  //Configuración de módulos
-  config(): void {
-      // configuración del puerto para el servidor
-      this.app.set("port", 3000);
+    //Configuración de módulos
+    config(): void {
+        // configuración del puerto para el servidor
+        this.app.set("port", 3000);
 
 
-      // muestra las peticiones en consola
-      this.app.use(morgan("dev"));
+        // muestra las peticiones en consola
+        this.app.use(morgan("dev"));
 
 
-      // puertos de conexión de la API
-      this.app.use(cors());
+        // puertos de conexión de la API
+        this.app.use(cors());
 
 
-      // solo se permiten peticiones en formato JSON
-      this.app.use(bodyParser.json());
-      this.app.use(bodyParser.urlencoded({ extended: false, }),
-      );
-  }
+        // solo se permiten peticiones en formato JSON
+        this.app.use(bodyParser.json());
+        this.app.use(bodyParser.urlencoded({ extended: false, }),
+        );
+    }
 
 
-  //Configura las rutas
-  routes() {
-      this.app.use("/", authRoutes);
-  }
+    //Configura las rutas
+    routes() {
+        this.app.use('/', authRoutes);
+        this.app.use('/usuario',usuarioRoutes)
+    }
 }
 
 
