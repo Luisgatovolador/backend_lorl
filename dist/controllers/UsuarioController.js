@@ -43,6 +43,9 @@ class UsuarioController {
                 if (!req.body.password) {
                     return res.status(400).json({ message: "La contraseña no puede estar vacía" });
                 }
+                if (!req.body.role) {
+                    return res.status(400).json({ message: "El rol no puede estar vacío" });
+                }
                 const encryptedText = yield utils_1.utils.hashPassword(req.body.password);
                 if (!encryptedText) {
                     return res.status(500).json({ message: "Error al cifrar la contraseña" });
@@ -69,6 +72,9 @@ class UsuarioController {
                 if (req.body.password && !validator_1.default.isStrongPassword(req.body.password)) {
                     return res.status(400).json({ message: "La contraseña debe ser segura" });
                 }
+                if (!req.body.role) {
+                    return res.status(400).json({ message: "El rol no puede estar vacío" });
+                }
                 if (req.body.usuario && req.body.usuario.password) {
                     var encryptedText = yield utils_1.utils.hashPassword(req.body.password);
                     req.body.password = encryptedText;
@@ -87,11 +93,14 @@ class UsuarioController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { email } = req.body;
-                console.log('Email:', email);
                 if (!validator_1.default.isEmail(email)) {
                     return res.status(400).json({ message: "Correo electrónico no válido" });
                 }
                 const connection = yield connection_1.default;
+                const userExists = yield connection.query('SELECT * FROM tbl_usuario WHERE email = ?', [email]);
+                if (userExists.length === 0) {
+                    return res.status(404).json({ message: "El usuario con este correo electrónico no existe" });
+                }
                 const result = yield connection.query('DELETE FROM tbl_usuario WHERE email = ?', [email]);
                 return res.json({ text: "Usuario con el correo " + email + " ha sido eliminado" });
             }
